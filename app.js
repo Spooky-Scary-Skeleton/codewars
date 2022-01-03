@@ -1,12 +1,17 @@
 const express = require("express");
 
 const index = require("./routes/index");
+const login = require("./routes/login");
+const problems = require("./routes/problems");
 
 const app = express();
 
 app.set("view engine", "ejs")
 
 app.use("/", index);
+app.use("/login", login);
+app.use("/", problems);
+
 
 app.use(function (req, res, next) {
   const err = new Error("Not Found");
