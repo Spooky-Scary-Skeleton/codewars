@@ -20,6 +20,9 @@ mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use("/", index);
 app.use("/login", login);
 app.use("/", problems);
