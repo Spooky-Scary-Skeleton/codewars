@@ -1,4 +1,9 @@
 const express = require("express");
+const configResult = require('dotenv').config();
+
+if (configResult.error) {
+  throw configResult.error;
+}
 
 const index = require("./routes/index");
 const login = require("./routes/login");
