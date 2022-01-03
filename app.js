@@ -4,6 +4,8 @@ const index = require("./routes/index");
 
 const app = express();
 
+app.set("view engine", "ejs")
+
 app.use("/", index);
 
 app.use(function (req, res, next) {
