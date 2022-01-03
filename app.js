@@ -1,4 +1,6 @@
 const express = require("express");
+const passport = require("passport");
+const mongoose = require("mongoose");
 const configResult = require('dotenv').config();
 
 if (configResult.error) {
@@ -11,8 +13,12 @@ const problems = require("./routes/problems");
 
 const app = express();
 
+require("./utils/setAuthStratage")();
+
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
+
 app.use(express.static("public"));
-app.set("view engine", "ejs")
+app.set("view engine", "ejs");
 
 app.use("/", index);
 app.use("/login", login);
