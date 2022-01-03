@@ -8,7 +8,7 @@ module.exports = function () {
       {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: "http://127.0.0.1:8000/login/auth/callback",
+        callbackURL: "/login/auth/callback",
       },
       function (accessToken, refreshToken, profile, done) {
         console.log("1111this runs!", accessToken)
