@@ -1,6 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const session = require('express-session');
+const mongoStore = require('connect-mongo');
 const mongoose = require("mongoose");
 const configurePassport = require("./utils/configurePassport");
 const configResult = require('dotenv').config();
@@ -28,12 +29,20 @@ app.use(session({
   cookie: {
     maxAge: Number(process.env.SESSION_MAX_AGE),
   },
+  store: mongoStore.create({
+    mongoUrl: process.env.MONGODB_CONNECTION_STRING,
+  })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/", index);
+app.use("/afterauthtest", (req, res) => res.send("afterauth"));
 app.use("/login", login);
+app.use("/logout", (req, res) => {
+  req.logOut();
+  res.redirect('/');
+});
 app.use("/", problems);
 
 

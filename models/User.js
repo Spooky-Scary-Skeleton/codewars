@@ -6,8 +6,10 @@ const mongoose = require("mongoose");
 
  */
 const userSchema = new mongoose.Schema({
-  userId: {
+  username: String,
+  githubId: {
     type: String,
+    required: true,
     unique: true,
   }
 });

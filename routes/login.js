@@ -9,18 +9,20 @@ router.get("/", (req, res) => {
 router.get("/auth",   (req, res, next) => {
   console.log("/auth router!!!", req.user);
   next();
-},passport.authenticate("github"));
+},passport.authenticate("github")
+);
 
 router.get(
   "/auth/callback",
   (req, res, next) => {
-    console.log("/auth/callback router!!!", req.user);
+    console.log("/auth/callback router!!!", "req.user");
     next();
   },
   passport.authenticate("github", { failureRedirect: "/login" }),
   (req, res) => {
-    console.log("this also runs", "req.user")
-    res.end("authorized!!");
+    console.log("authed", req.user);
+    console.log("authed2", req.session);
+    res.redirect("/");
   }
 );
 
