@@ -1,6 +1,8 @@
 const express = require("express");
 const passport = require("passport");
+const session = require('express-session');
 const mongoose = require("mongoose");
+const configurePassport = require("./utils/configurePassport");
 const configResult = require('dotenv').config();
 
 if (configResult.error) {
@@ -13,13 +15,20 @@ const problems = require("./routes/problems");
 
 const app = express();
 
-require("./utils/setAuthStratage")();
-
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
 
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
+configurePassport();
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: Number(process.env.SESSION_MAX_AGE),
+  },
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 

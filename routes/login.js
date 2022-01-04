@@ -19,7 +19,7 @@ router.get(
   },
   passport.authenticate("github", { failureRedirect: "/login" }),
   (req, res) => {
-    console.log("this also runs", req.user)
+    console.log("this also runs", "req.user")
     res.end("authorized!!");
   }
 );
