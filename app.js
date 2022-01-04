@@ -13,6 +13,8 @@ if (configResult.error) {
 const index = require("./routes/index");
 const login = require("./routes/login");
 const problems = require("./routes/problems");
+const checkLogin = require("./middlewares/checkLoginHandler");
+const logoutHandler = require("./middlewares/logoutHandler")
 
 const app = express();
 
@@ -31,19 +33,15 @@ app.use(session({
   },
   store: mongoStore.create({
     mongoUrl: process.env.MONGODB_CONNECTION_STRING,
-  })
+  }),
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/", index);
-app.use("/afterauthtest", (req, res) => res.send("afterauth"));
 app.use("/login", login);
-app.use("/logout", (req, res) => {
-  req.logOut();
-  res.redirect('/');
-});
-app.use("/", problems);
+app.use("/", checkLogin, index);
+app.use("/logout", logoutHandler);
+app.use("/problems", problems);
 
 
 app.use(function (req, res, next) {
