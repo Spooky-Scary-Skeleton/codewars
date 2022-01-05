@@ -1,4 +1,20 @@
-<div><%= problem.title %> </div>
-<div>정답자 수: <%= problem.completed_users %> </div>
-<div>난이도: Level <%= problem.difficulty_level %> </div>
-<div>문제설명: <%= problem.description %> </div>
+<div><%= problem.title %></div>
+<div>정답자 수: <%= problem.completed_users %></div>
+<div>난이도: Level <%= problem.difficulty_level %></div>
+<div>문제설명: <%= problem.description %></div>
+<div id="editor-continer">
+  <form action="/problems/<%= problem._id %>" method="post">
+    <div id="code-input"></div>
+  </form>
+  <button class="editor-submit-button">제출</button>
+</div>
+
+
+<script>
+  CodeMirror(document.querySelector("#code-input"), {
+  lineNumbers: true,
+  tabSize: 2,
+  value: "//정답코드를 작성해주세요.\n",
+  mode: "javascript"
+});
+</script>

@@ -6,3 +6,21 @@ body {
 a {
   color: #00b7ff;
 }
+
+#editor-continer {
+  margin: 2rem auto;
+  width: 80%;
+  height: 80%;
+}
+
+form {
+  border: 1px solid black;
+}
+
+.editor-submit-button {
+  display: block;
+  margin: 1rem auto;
+  width: 5rem;
+  height: 2rem;
+}
+
