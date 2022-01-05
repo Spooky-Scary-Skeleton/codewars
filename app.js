@@ -26,6 +26,8 @@ app.use(express.static("public"));
 
 app.set("view engine", "ejs");
 
+app.use(express.urlencoded({ extended: true }));
+
 configurePassport();
 
 app.use(session({
@@ -46,8 +48,6 @@ app.use("/login", login);
 app.use("/", checkLogin, index);
 app.use("/logout", logoutHandler);
 app.use("/problems", problems);
-
-
 app.use(function (req, res, next) {
   const err = new Error("Not Found");
   err.status = 404;

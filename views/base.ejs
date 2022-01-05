@@ -13,7 +13,17 @@
     <% } %>
 
     <% if (url.includes("/problems")) { %>
-      <%- include('./partials/problem.ejs', { problem }); %>
+      <% if (!result) { %>
+        <%- include('./partials/problem.ejs', { problem }); %>
+      <% } %>
+
+      <% if (result === "success") { %>
+        <%- include('./partials/success.ejs'); %>
+      <% } %>
+
+      <% if (result === "failure") { %>
+        <%- include('./partials/failure.ejs', { failureMessage }); %>
+      <% } %>
     <% } %>
   </body>
 </html>

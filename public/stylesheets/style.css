@@ -24,3 +24,6 @@ form {
   height: 2rem;
 }
 
+.error-message {
+  white-space: pre;
+}
