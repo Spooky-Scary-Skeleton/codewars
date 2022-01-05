@@ -1,0 +1,20 @@
+<h1>Codewars</h1>
+<h2>코딩 전쟁이 일어난다. 모든 대원들, 전투 준비!</h2>
+
+<ul class="tabs">
+  <li>Level 1</li>
+  <li>Level 2</li>
+  <li>Level 3</li>
+</ul>
+
+<ul class="problems">
+  <% problems.forEach(problem => { %>
+      <li>
+        <a href=<%=`/problems/${problem._id}` %>>
+          <div><%= problem.title %></div>
+        </a>
+        <div>정답자: <%= problem.completed_users %></div>
+        <div>난이도: Level <%= problem.difficulty_level %></div>
+      </li>
+  <% }); %>
+</ul>

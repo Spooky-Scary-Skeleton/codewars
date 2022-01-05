@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('./partials/head.ejs'); %>
+  </head>
+  <body>
+    <% if (url === "/") { %>
+      <%- include('./partials/index.ejs', { problems }); %>
+    <% } %>
+
+    <% if (url === "/login") { %>
+      <%- include('./partials/login.ejs'); %>
+    <% } %>
+
+    <% if (url.includes("/problems")) { %>
+      <%- include('./partials/problem.ejs', { problem }); %>
+    <% } %>
+  </body>
+</html>
