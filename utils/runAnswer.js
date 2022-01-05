@@ -1,5 +1,6 @@
 process.on("message", function ({ tests, userInput }) {
   const vm = require("vm");
+  console.log(`Worker ${process.pid} started`);
 
   for (let i = 0; i < tests.length - 1; i++) {
     const test = tests[i];
@@ -28,6 +29,7 @@ process.on("message", function ({ tests, userInput }) {
       return;
     }
 
+    console.log("afte catch", context.result, test.solution);
     if (context.result !== test.solution) {
       process.send({
         type: "wrong submission",
@@ -42,9 +44,12 @@ process.on("message", function ({ tests, userInput }) {
           "정답: " +
           test.solution,
       });
+      console.log("afte send", context.result, test.solution);
       return;
     }
   }
+  console.log("after for loop");
+
   process.send({
     type: "success",
     messageString: "success",

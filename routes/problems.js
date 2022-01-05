@@ -34,22 +34,25 @@ router.post("/:problem_id", async (req, res, next) => {
       cluster.on("online", function (worker) {
         let timer = 0;
 
-        worker.on("error", function(error) {console.log(error)});
+        worker.on("error", function(error) {console.log("errorhappened", error)});
+        worker.on("exit", () => {console.log(worker.process.pid, "is dead")})
         worker.on("message", function (message) {
-          worker.destroy();
+          worker.process.kill();
+          console.log(worker);
           clearTimeout(timer);
           console.log(message);
           if (message.type === "execution fail") {
+            console.log("render1!!!!");
             res.render("base", {
               url: req.originalUrl,
               result: "failure",
               failureMessage: message.messageString,
               problemId,
             });
-            return;
           }
 
           if (message.type === "wrong submission") {
+            console.log("render2!!!!");
             res.render("base", {
               url: req.originalUrl,
               result: "failure",
@@ -59,30 +62,30 @@ router.post("/:problem_id", async (req, res, next) => {
           }
 
           if (message.type === "success") {
+            console.log("render3!!!!");
             res.render("base", { url: req.originalUrl, result: "success" });
           }
         });
 
         timer = setTimeout(function () {
           worker.destroy();
+          console.log("render4!!!!");
           res.render("base", {
             url: req.originalUrl,
             result: "failure",
             failureMessage: "시간초과!",
             problemId,
           });
-        }, 3000);
+        }, 5000);
 
         worker.send({ tests: problem.tests, userInput: req.body.input });
       });
-
+      cluster.fork();
     }
   } catch (error) {
     console.log(error);
     next(error);
   }
-
-  cluster.fork();
 });
 
 module.exports = router;
