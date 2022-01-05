@@ -13,7 +13,7 @@ function solution1(n) {
 }
 
 function solution2(n) {
-  return n.findIndex(name => name === "Kim");
+  return `김서방은 ${n.findIndex(name => name === "Kim")}에 있다`;
 }
 
 function solution3(n) {

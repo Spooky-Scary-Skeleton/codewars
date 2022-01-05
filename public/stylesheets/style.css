@@ -27,3 +27,9 @@ form {
 .error-message {
   white-space: pre;
 }
+
+.success-redirection-link {
+  display: block;
+  margin-top: 2rem;
+  font-size: large;
+}
