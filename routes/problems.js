@@ -34,10 +34,11 @@ router.post("/:problem_id", async (req, res, next) => {
       cluster.on("online", function (worker) {
         let timer = 0;
 
+        worker.on("error", function(error) {console.log(error)});
         worker.on("message", function (message) {
+          worker.destroy();
           clearTimeout(timer);
           console.log(message);
-          worker.destroy();
           if (message.type === "execution fail") {
             res.render("base", {
               url: req.originalUrl,
@@ -75,12 +76,13 @@ router.post("/:problem_id", async (req, res, next) => {
         worker.send({ tests: problem.tests, userInput: req.body.input });
       });
 
-      cluster.fork();
     }
   } catch (error) {
     console.log(error);
     next(error);
   }
+
+  cluster.fork();
 });
 
 module.exports = router;
