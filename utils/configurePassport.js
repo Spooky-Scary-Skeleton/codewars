@@ -11,10 +11,9 @@ module.exports = function () {
         callbackURL: "http://127.0.0.1:8000/login/auth/callback",
       },
       async function (accessToken, refreshToken, profile, done) {
-        console.log("1111this runs!", profile.id, profile.username);
         try {
           const currentUser = await User.findOne({ githubId: profile.id });
-          console.log("cu", currentUser);
+
           if (currentUser) {
             done(null, currentUser);
           } else {
@@ -26,7 +25,6 @@ module.exports = function () {
             done(null, currentUser);
           }
         } catch (error) {
-          console.log("cametoerrorblock");
           done(error);
         }
       }
@@ -34,12 +32,10 @@ module.exports = function () {
   );
 
   passport.serializeUser(function (user, done) {
-    console.log("what is this???", user);
     done(null, user._id);
   });
 
   passport.deserializeUser(async function (id, done) {
-    console.log("what is this222???", id);
     try {
       const user = await User.findById(id);
       done(null, user);

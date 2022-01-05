@@ -1,8 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-  res.render("index", { title: "바닐라코딩" });
+router.get("/:problem_id", (req, res, next) => {
+  res.send("hey!");
+});
+
+router.post("/:problem_id", (req, res, next) => {
+  res.send("hey!");
 });
 
 module.exports = router;
