@@ -19,11 +19,11 @@ function solution2(n) {
 function solution3(n) {
   let result = "";
 
-  for (let i = 0; i < n; n++) {
+  for (let i = 0; i < n; i++) {
     if (!(i % 2)) {
-      result + "수";
+      result += "수";
     } else {
-      result + "박";
+      result += "박";
     }
   }
 

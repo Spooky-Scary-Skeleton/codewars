@@ -17,6 +17,10 @@ form {
   border: 1px solid black;
 }
 
+div {
+  width: fit-content;
+}
+
 .editor-submit-button {
   display: block;
   margin: 1rem auto;
