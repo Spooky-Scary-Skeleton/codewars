@@ -22,7 +22,7 @@
       <% } %>
 
       <% if (result === "failure") { %>
-        <%- include('./partials/failure.ejs', { failureMessage }); %>
+        <%- include('./partials/failure.ejs', { failureMessage, problemId }); %>
       <% } %>
     <% } %>
   </body>

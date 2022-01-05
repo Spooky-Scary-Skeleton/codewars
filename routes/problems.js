@@ -28,81 +28,54 @@ router.post("/:problem_id", async (req, res, next) => {
 
     if (problem) {
       cluster.setupMaster({
-        exec: "../utils/runAnswer",
+        exec: "./utils/runAnswer",
       });
 
       cluster.on("online", function (worker) {
         let timer = 0;
 
-        worker.on("message", function (msg) {
-          clearTimeout(timer); //The worker responded in under 5 seconds, clear the timeout
-          console.log(msg);
-          worker.destroy(); //Don't leave him hanging
+        worker.on("message", function (message) {
+          clearTimeout(timer);
+          console.log(message);
+          worker.destroy();
+          if (message.type === "execution fail") {
+            res.render("base", {
+              url: req.originalUrl,
+              result: "failure",
+              failureMessage: message.messageString,
+              problemId,
+            });
+            return;
+          }
+
+          if (message.type === "wrong submission") {
+            res.render("base", {
+              url: req.originalUrl,
+              result: "failure",
+              failureMessage: message.messageString,
+              problemId,
+            });
+          }
+
+          if (message.type === "success") {
+            res.render("base", { url: req.originalUrl, result: "success" });
+          }
         });
 
         timer = setTimeout(function () {
-          worker.destroy(); //Give it 5 seconds to run, then abort it
-          console.log("worker timed out");
-        }, 5000);
+          worker.destroy();
+          res.render("base", {
+            url: req.originalUrl,
+            result: "failure",
+            failureMessage: "시간초과!",
+          });
+        }, 3000);
 
-        worker.send({ tests: problem.tests, userInput: req.body.input }); //Send the code to run for the worker
+        worker.send({ tests: problem.tests, userInput: req.body.input });
       });
 
       cluster.fork();
-
-      for (let i = 0; i < problem.tests.length - 1; i++) {
-        const test = problem.tests[i];
-        const context = vm.createContext({ result: null });
-        const userScript = new vm.Script(req.body.input + "\n" + `result = ${test.code}`);
-
-        try {
-          userScript.runInContext(context);
-        } catch (error) {
-          res.render("base", {
-            url: req.originalUrl,
-            result: "failure",
-            failureMessage:
-              "실행오류!: " +
-              error.message +
-              "\n" +
-              "\n" +
-              "실행오류 스택: " +
-              "\n" +
-              error.stack,
-          });
-          return;
-        }
-
-        if (context.result !== test.solution) {
-          res.render("base", {
-            url: req.originalUrl,
-            result: "failure",
-            failureMessage:
-              "틀린 테스트 케이스: " +
-              test.code +
-              ";" +
-              "\n" +
-              "제출한 값: " +
-              context.result +
-              "\n" +
-              "정답: " +
-              test.solution,
-          });
-          return;
-        }
-      }
-
-      res.render("base", { url: req.originalUrl, result: "success" });
-      return;
     }
-
-    next(new Error("no test case for this problem."));
-
-    // console.log("this runs", req.body.input, problem);
-    // console.log("this runs", eval(req.body.input));
-    // console.log("this runs", solution);
-    // console.log("eval running test code", eval(problem.tests[0].code));
-    // res.send("hey!!!!!");
   } catch (error) {
     console.log(error);
     next(error);
@@ -110,3 +83,57 @@ router.post("/:problem_id", async (req, res, next) => {
 });
 
 module.exports = router;
+
+    //   for (let i = 0; i < problem.tests.length - 1; i++) {
+    //     const test = problem.tests[i];
+    //     const context = vm.createContext({ result: null });
+    //     const userScript = new vm.Script(req.body.input + "\n" + `result = ${test.code}`);
+
+    //     try {
+    //       userScript.runInContext(context);
+    //     } catch (error) {
+    //       res.render("base", {
+    //         url: req.originalUrl,
+    //         result: "failure",
+    //         failureMessage:
+    //           "실행오류!: " +
+    //           error.message +
+    //           "\n" +
+    //           "\n" +
+    //           "실행오류 스택: " +
+    //           "\n" +
+    //           error.stack,
+    //       });
+    //       return;
+    //     }
+
+    //     if (context.result !== test.solution) {
+    //       res.render("base", {
+    //         url: req.originalUrl,
+    //         result: "failure",
+    //         failureMessage:
+    //           "틀린 테스트 케이스: " +
+    //           test.code +
+    //           ";" +
+    //           "\n" +
+    //           "제출한 값: " +
+    //           context.result +
+    //           "\n" +
+    //           "정답: " +
+    //           test.solution,
+    //       });
+    //       return;
+    //     }
+    //   }
+
+    //   res.render("base", { url: req.originalUrl, result: "success" });
+    //   return;
+    // }
+
+    // next(new Error("no test case for this problem."));
+
+    // console.log("this runs", req.body.input, problem);
+    // console.log("this runs", eval(req.body.input));
+    // console.log("this runs", solution);
+    // console.log("eval running test code", eval(problem.tests[0].code));
+    // res.send("hey!!!!!");

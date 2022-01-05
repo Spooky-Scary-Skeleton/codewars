@@ -1,23 +1,22 @@
 process.on("message", function ({ tests, userInput }) {
   const vm = require("vm");
 
-  script.runInNewContext(ctx);
-
-  //Send the finished message to the parent process
-
   for (let i = 0; i < tests.length - 1; i++) {
-    const test = problem.tests[i];
+    const test = tests[i];
     const context = vm.createContext({ result: null });
     const userScript = new vm.Script(
       userInput + "\n" + `result = ${test.code}`
     );
 
     try {
+      console.log("beforevm");
       userScript.runInContext(context);
+      console.log("aftervm");
     } catch (error) {
+      console.log("came to error block");
       process.send({
-        yype: "execution fail",
-        message:
+        type: "execution fail",
+        messageString:
         "실행오류!: " +
           error.message +
           "\n" +
@@ -32,7 +31,7 @@ process.on("message", function ({ tests, userInput }) {
     if (context.result !== test.solution) {
       process.send({
         type: "wrong submission",
-        message:
+        messageString:
           "틀린 테스트 케이스: " +
           test.code +
           ";" +
@@ -43,10 +42,11 @@ process.on("message", function ({ tests, userInput }) {
           "정답: " +
           test.solution,
       });
+      return;
     }
   }
   process.send({
     type: "success",
-    message: "success",
+    messageString: "success",
   });
 });
