@@ -3,13 +3,10 @@ const passport = require("passport");
 const session = require("express-session");
 const mongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
-const configurePassport = require("./utils/configurePassport");
-const { ERROR_MESSAGES } = require("./utils/constants");
-const errorWithStatus = require("./utils/errorWithStatus");
 const configResult = require("dotenv").config();
 
 if (configResult.error) {
-  throw configResult.error;
+  throw new Error( "Failed to set environment variable. Check dotenv settings.");
 }
 
 const index = require("./routes/index");
@@ -17,6 +14,10 @@ const login = require("./routes/login");
 const problems = require("./routes/problems");
 const checkLogin = require("./middlewares/checkLoginHandler");
 const logoutHandler = require("./middlewares/logoutHandler");
+
+const configurePassport = require("./utils/configurePassport");
+const { ERROR_MESSAGES } = require("./utils/constants");
+const errorWithStatus = require("./utils/errorWithStatus");
 
 const app = express();
 
