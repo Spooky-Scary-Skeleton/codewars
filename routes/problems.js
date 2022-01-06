@@ -53,6 +53,7 @@ router.post("/:problem_id", async (req, res, next) => {
 
           if (message.type === "wrong submission") {
             console.log("render2!!!!");
+            console.log("-----------------------");
             res.render("base", {
               url: req.originalUrl,
               result: "failure",
@@ -80,6 +81,7 @@ router.post("/:problem_id", async (req, res, next) => {
 
         worker.send({ tests: problem.tests, userInput: req.body.input });
       });
+      console.log("forking here");
       cluster.fork();
     }
   } catch (error) {
