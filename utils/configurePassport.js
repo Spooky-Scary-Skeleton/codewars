@@ -3,7 +3,7 @@ const passport = require("passport");
 const User = require("../models/User");
 const GitHubStrategy = require("passport-github").Strategy;
 const { ERROR_MESSAGE } = require("../utils/constants");
-const errorWithStatus = requir("../utils/errorWithStatus");
+const errorWithStatus = require("../utils/errorWithStatus");
 
 module.exports = function () {
   passport.use(
