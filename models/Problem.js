@@ -13,7 +13,7 @@ const ProblemSchema = new mongoose.Schema({
     required: PROBLEM.TITLE,
   },
   completedUsers: {
-    type: Number,
+    type: Array,
     required: PROBLEM.COMPLETED_USERS,
   },
   difficultyLevel: {
