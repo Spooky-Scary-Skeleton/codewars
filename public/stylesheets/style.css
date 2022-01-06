@@ -13,12 +13,12 @@ a {
   height: 80%;
 }
 
-form {
+/* form {
   border: 1px solid black;
-}
+} */
 
-div {
-  width: fit-content;
+#code-editor-form {
+  width: 100%;
 }
 
 .editor-submit-button {
@@ -36,4 +36,13 @@ div {
   display: block;
   margin-top: 2rem;
   font-size: large;
+}
+
+/* .user-input-continer {
+  width: 100%;
+  border: 1px solid black;
+} */
+
+.CodeMirror {
+  border: 1px solid black;
 }

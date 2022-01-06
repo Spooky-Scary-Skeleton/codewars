@@ -37,18 +37,21 @@ router.post("/:problem_id", async (req, res, next) => {
         try {
           userScript.runInContext(context);
         } catch (error) {
+          const mainErrorInfo = error.stack.split("\n")[4];
           res.render("base", {
             url: req.originalUrl,
             result: "failure",
             failureMessage:
-              "실행오류!: " +
-              error.message +
+              "실행오류!" +
               "\n" +
               "\n" +
-              "실행오류 스택: " +
+              mainErrorInfo +
               "\n" +
-              error.stack,
+              "\n" +
+              "내가 제출한 코드:" +
+              "\n",
             problemId,
+            inputCode: req.body.input,
           });
           return;
         }
@@ -68,6 +71,7 @@ router.post("/:problem_id", async (req, res, next) => {
               "정답: " +
               test.solution,
             problemId,
+            inputCode: req.body.input,
           });
           return;
         }

@@ -1,4 +1,20 @@
 <h1>틀렸습니다!!!</h1>
 <div class="error-message"><%= failureMessage %></div>
-<div><a href="/problems/<%= problemId %>">문제로 돌아가기</a></div>
-<div><a href="/">문제목록으로 돌아가기</a></div>
+<h2>내가 쓴 코드</h2>
+<div class="user-input-continer">
+  <textarea id="code-input" form="code-editor-form" name="input"></textarea>
+</div>
+<div class="failure-menu-container">
+  <div><a href="/problems/<%= problemId %>">문제로 돌아가기</a></div>
+  <div><a href="/">문제목록으로 돌아가기</a></div>
+</div>
+<script>
+  const myCodeMirror = CodeMirror.fromTextArea(document.querySelector("#code-input"), {
+    lineNumbers: true,
+    tabSize: 2,
+    mode: "javascript",
+  });
+
+  myCodeMirror.setValue(`<%= inputCode %>`);
+</script>
+
