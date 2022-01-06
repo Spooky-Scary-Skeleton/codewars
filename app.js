@@ -1,10 +1,12 @@
 const express = require("express");
 const passport = require("passport");
-const session = require('express-session');
-const mongoStore = require('connect-mongo');
+const session = require("express-session");
+const mongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
 const configurePassport = require("./utils/configurePassport");
-const configResult = require('dotenv').config();
+const { ERROR_MESSAGES } = require("./utils/constants");
+const errorWithStatus = require("./utils/errorWithStatus");
+const configResult = require("dotenv").config();
 
 if (configResult.error) {
   throw configResult.error;
@@ -14,14 +16,14 @@ const index = require("./routes/index");
 const login = require("./routes/login");
 const problems = require("./routes/problems");
 const checkLogin = require("./middlewares/checkLoginHandler");
-const logoutHandler = require("./middlewares/logoutHandler")
+const logoutHandler = require("./middlewares/logoutHandler");
 
 const app = express();
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
 
-app.use('/lib', express.static(__dirname + '/node_modules/codemirror/lib'));
-app.use('/mode', express.static(__dirname + '/node_modules/codemirror/mode'));
+app.use("/lib", express.static(__dirname + "/node_modules/codemirror/lib"));
+app.use("/mode", express.static(__dirname + "/node_modules/codemirror/mode"));
 app.use(express.static("public"));
 
 app.set("view engine", "ejs");
@@ -30,17 +32,19 @@ app.use(express.urlencoded({ extended: true }));
 
 configurePassport();
 
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: Number(process.env.SESSION_MAX_AGE),
-  },
-  store: mongoStore.create({
-    mongoUrl: process.env.MONGODB_CONNECTION_STRING,
-  }),
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: Number(process.env.SESSION_MAX_AGE),
+    },
+    store: mongoStore.create({
+      mongoUrl: process.env.MONGODB_CONNECTION_STRING,
+    }),
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -48,10 +52,8 @@ app.use("/login", login);
 app.use("/", checkLogin, index);
 app.use("/logout", logoutHandler);
 app.use("/problems", problems);
-app.use(function (req, res, next) {
-  const err = new Error("Not Found");
-  err.status = 404;
-  next(err);
+app.use("*", function (req, res, next) {
+  next(errorWithStatus(ERROR_MESSAGES.PAGE_NOT_FOUND, 404));
 });
 
 app.use(function (err, req, res, next) {

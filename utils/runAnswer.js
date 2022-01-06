@@ -18,13 +18,13 @@ process.on("message", function ({ tests, userInput }) {
       process.send({
         type: "execution fail",
         messageString:
-        "실행오류!: " +
+          "실행오류!: " +
           error.message +
           "\n" +
           "\n" +
           "실행오류 스택: " +
           "\n" +
-          error.stack
+          error.stack,
       });
       return;
     }

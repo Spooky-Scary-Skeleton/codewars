@@ -1,6 +1,9 @@
 const passport = require("passport");
+
 const User = require("../models/User");
 const GitHubStrategy = require("passport-github").Strategy;
+const { ERROR_MESSAGE } = require("../utils/constants");
+const errorWithStatus = requir("../utils/errorWithStatus");
 
 module.exports = function () {
   passport.use(
@@ -25,7 +28,7 @@ module.exports = function () {
             done(null, currentUser);
           }
         } catch (error) {
-          done(error);
+          done(errorWithStatus(ERROR_MESSAGE.DB_ERROR, 500));
         }
       }
     )
@@ -39,8 +42,8 @@ module.exports = function () {
     try {
       const user = await User.findById(id);
       done(null, user);
-    } catch(error) {
-      done(error);
+    } catch (error) {
+      done(errorWithStatus(ERROR_MESSAGE.DB_ERROR, 500));
     }
   });
 };
