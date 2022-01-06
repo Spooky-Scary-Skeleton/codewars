@@ -4,7 +4,7 @@ const router = express.Router();
 
 const renderErrorCallback = require("../utils/renderErrorCallback");
 
-router.get("/", (req, res) => {
+router.get("/", (req, res, next) => {
   res.render(
     "base",
     { url: req.originalUrl },
