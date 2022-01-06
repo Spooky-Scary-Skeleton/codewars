@@ -31,10 +31,11 @@ function solution3(n) {
 }
 
 function solution4(n) {
-  const numList = n.split("");
-  const sum = numList.reduce((acc, cur) => acc + cur);
+  const numList = n.toString().split("");
+  const sum = numList.reduce((acc, cur) => Number(acc) + Number(cur));
+  console.log(sum);
 
-  if (n % sum) {
+  if (!(n % sum)) {
     return true;
   }
 
