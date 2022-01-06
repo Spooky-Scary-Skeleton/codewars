@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: USER.GITHUB_ID,
     unique: true,
-  }
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

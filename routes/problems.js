@@ -12,12 +12,14 @@ router.get("/:problem_id", async (req, res, next) => {
     const problemId = req.params.problem_id;
     const problem = await Problem.findById(problemId).lean();
 
-    res.render("base", {
-      problem,
-      url: req.originalUrl,
-      result: null,
-    },
-    renderErrorCallback(req, res, next)
+    res.render(
+      "base",
+      {
+        problem,
+        url: req.originalUrl,
+        result: null,
+      },
+      renderErrorCallback(req, res, next)
     );
   } catch (error) {
     next(errorWithStatus(req, ERROR_MESSAGES.DB_ERROR, 500, error));
@@ -87,6 +89,7 @@ router.post("/:problem_id", async (req, res, next) => {
           return;
         }
       }
+      await Problem.findByIdAndUpdate(problemId, { $addToSet: { completedUsers: req.user._id } });
       res.render(
         "base",
         { url: req.originalUrl, result: "success" },
