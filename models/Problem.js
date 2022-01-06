@@ -7,7 +7,7 @@ const { PROBLEM } = require("../utils/constants").ERROR_MESSAGES.SCHEMA;
   TODO: Fill in the model specification
 
  */
-const ProblemSchema = new mongoose.Schema({
+const problemSchema = new mongoose.Schema({
   title: {
     type: String,
     required: PROBLEM.TITLE,
@@ -27,7 +27,7 @@ const ProblemSchema = new mongoose.Schema({
   tests: {
     type: Array,
     required: PROBLEM.TESTS,
-  }
+  },
 });
 
-module.exports = mongoose.model("Problem", ProblemSchema);
+module.exports = mongoose.model("Problem", problemSchema);

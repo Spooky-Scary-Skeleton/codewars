@@ -15,7 +15,7 @@
             <%= problem.title %>
           </a>
         </div>
-        <div>정답자: <%= problem.completed_users %></div>
+        <div>정답자: <%= problem.completedUsers.length %></div>
         <div>난이도: Level <%= problem.difficulty_level %></div>
       </li>
   <% }); %>
