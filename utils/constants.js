@@ -5,6 +5,7 @@ exports.ERROR_MESSAGES = {
   INTERNAL_SERVER_ERROR: "Internal Server Error.",
   ENVIRONMENT_VARIABLE_SET_FAIL: "Failed to load environment variable.",
   DB_ERROR: "Something went wrong using DB",
+  TEMPLATE_ERROR: "Something went wrong rendering template.",
   SCHEMA: {
     PROBLEM: {
       TITLE: "title is empty.",

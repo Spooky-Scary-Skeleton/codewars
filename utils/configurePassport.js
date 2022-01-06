@@ -5,7 +5,7 @@ const GitHubStrategy = require("passport-github").Strategy;
 const { ERROR_MESSAGE } = require("../utils/constants");
 const errorWithStatus = require("../utils/errorWithStatus");
 
-module.exports = function () {
+module.exports = function configurePassport() {
   passport.use(
     new GitHubStrategy(
       {

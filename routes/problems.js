@@ -5,6 +5,7 @@ const vm = require("vm");
 const Problem = require("../models/Problem");
 const { ERROR_MESSAGES } = require("../utils/constants");
 const errorWithStatus = require("../utils/errorWithStatus");
+const renderErrorCallback = require("../utils/renderErrorCallback");
 
 router.get("/:problem_id", async (req, res, next) => {
   try {
@@ -15,9 +16,11 @@ router.get("/:problem_id", async (req, res, next) => {
       problem,
       url: req.originalUrl,
       result: null,
-    });
+    },
+    renderErrorCallback(req, res, next)
+    );
   } catch (error) {
-    next(error);
+    next(errorWithStatus(req, ERROR_MESSAGES.DB_ERROR, 500, error));
   }
 });
 
@@ -38,50 +41,62 @@ router.post("/:problem_id", async (req, res, next) => {
           userScript.runInContext(context);
         } catch (error) {
           const mainErrorInfo = error.stack.split("\n")[4];
-          res.render("base", {
-            url: req.originalUrl,
-            result: "failure",
-            failureMessage:
-              "실행오류!" +
-              "\n" +
-              "\n" +
-              mainErrorInfo +
-              "\n" +
-              "\n" +
-              "내가 제출한 코드:" +
-              "\n",
-            problemId,
-            inputCode: req.body.input,
-          });
+          res.render(
+            "base",
+            {
+              url: req.originalUrl,
+              result: "failure",
+              failureMessage:
+                "실행오류!" +
+                "\n" +
+                "\n" +
+                mainErrorInfo +
+                "\n" +
+                "\n" +
+                "내가 제출한 코드:" +
+                "\n",
+              problemId,
+              inputCode: req.body.input,
+            },
+            renderErrorCallback(req, res, next)
+          );
           return;
         }
 
         if (context.result !== test.solution) {
-          res.render("base", {
-            url: req.originalUrl,
-            result: "failure",
-            failureMessage:
-              "틀린 테스트 케이스: " +
-              test.code +
-              ";" +
-              "\n" +
-              "제출한 값: " +
-              context.result +
-              "\n" +
-              "정답: " +
-              test.solution,
-            problemId,
-            inputCode: req.body.input,
-          });
+          res.render(
+            "base",
+            {
+              url: req.originalUrl,
+              result: "failure",
+              failureMessage:
+                "틀린 테스트 케이스: " +
+                test.code +
+                ";" +
+                "\n" +
+                "제출한 값: " +
+                context.result +
+                "\n" +
+                "정답: " +
+                test.solution,
+              problemId,
+              inputCode: req.body.input,
+            },
+            renderErrorCallback(req, res, next)
+          );
           return;
         }
       }
-      res.render("base", { url: req.originalUrl, result: "success" });
+      res.render(
+        "base",
+        { url: req.originalUrl, result: "success" },
+        renderErrorCallback(req, res, next)
+      );
       return;
     }
-    next(errorWithStatus(ERROR_MESSAGES.NO_TEST_CASE_FOUND, 404));
+    next(errorWithStatus(req, ERROR_MESSAGES.NO_TEST_CASE_FOUND, 404, error));
   } catch (error) {
-    next(errorWithStatus(ERROR_MESSAGES.DB_ERROR, 500));
+    next(errorWithStatus(req, ERROR_MESSAGES.DB_ERROR, 500, error));
   }
 });
 

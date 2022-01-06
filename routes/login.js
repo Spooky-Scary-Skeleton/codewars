@@ -2,8 +2,14 @@ const passport = require("passport");
 const express = require("express");
 const router = express.Router();
 
+const renderErrorCallback = require("../utils/renderErrorCallback");
+
 router.get("/", (req, res) => {
-  res.render("base", { url: req.originalUrl });
+  res.render(
+    "base",
+    { url: req.originalUrl },
+    renderErrorCallback(req, res, next)
+  );
 });
 
 router.get("/auth", passport.authenticate("github"));

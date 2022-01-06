@@ -54,7 +54,7 @@ app.use("/", checkLogin, index);
 app.use("/logout", logoutHandler);
 app.use("/problems", problems);
 app.use("*", function (req, res, next) {
-  next(errorWithStatus(ERROR_MESSAGES.PAGE_NOT_FOUND, 404));
+  next(errorWithStatus(req, ERROR_MESSAGES.PAGE_NOT_FOUND, 404));
 });
 
 app.use(function (err, req, res, next) {
