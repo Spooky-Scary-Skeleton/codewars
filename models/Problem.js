@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const { PROBLEM } = require("../utils/constants").ERROR_MESSAGES.SCHEMA;
+
 /*
 
   TODO: Fill in the model specification
@@ -8,23 +10,23 @@ const mongoose = require("mongoose");
 const ProblemSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
+    required: PROBLEM.TITLE,
   },
   completedUsers: {
     type: Number,
-    required: true,
+    required: PROBLEM.COMPLETED_USERS,
   },
   difficultyLevel: {
     type: Number,
-    required: true,
+    required: PROBLEM.DIFFICULTY_LEVEL,
   },
   description: {
     type: String,
-    required: true,
+    required: PROBLEM.DESCRIPTION,
   },
   tests: {
     type: Array,
-    required: true,
+    required: PROBLEM.TESTS,
   }
 });
 
