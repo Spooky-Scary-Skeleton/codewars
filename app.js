@@ -5,7 +5,7 @@ const mongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
 const configResult = require("dotenv").config();
 
-if (configResult.error) {
+if (process.env.NODE_ENV === "development" && configResult.error) {
   throw new Error( "Failed to set environment variable. Check dotenv settings.");
 }
 
